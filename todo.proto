@@ -9,7 +9,6 @@ message Empty {}
 
 message TodoItemId {
     int32 id = 1;
-    bool checked = 2;
 }
 
 message TodoItem {

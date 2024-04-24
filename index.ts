@@ -3,7 +3,6 @@ import * as protoLoader from "@grpc/proto-loader";
 
 interface TodoItemId {
   id: number;
-  checked: boolean;
 }
 
 interface TodoItem {
@@ -33,11 +32,11 @@ const fakeDb: TodoItem[] = [
   { id: 2, task: "leitura", checked: false },
 ];
 
-function changeTaskStatus(id: number, checked: boolean): TodoItem {
+function changeTaskStatus(id: number): TodoItem {
   if (!id) throw new Error("Id is required");
   const task = fakeDb.find((task) => task.id === id);
   if (!task) throw new Error("Task not found");
-  task.checked = !checked;
+  task.checked = !task.checked;
   return task;
 }
 
@@ -62,7 +61,7 @@ const todoService = {
   },
   mark: (call: Call<TodoItemId>, callback: Callback<TodoItem | null>) => {
     try {
-      const response = changeTaskStatus(call.request.id, call.request.checked);
+      const response = changeTaskStatus(call.request.id);
       callback(null, response);
     } catch (error) {
       if (error instanceof Error) callback(error, null);
