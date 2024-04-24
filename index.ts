@@ -1,27 +1,13 @@
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
-
-interface TodoItemId {
-  id: number;
-}
-
-interface TodoItem {
-  id: number;
-  task: string;
-  checked: boolean;
-}
-
-interface NewItem {
-  task: string;
-}
-
-interface Call<T> {
-  request: T;
-}
-
-interface Callback<T> {
-  (error: Error | null, response: T): void;
-}
+import {
+  Call,
+  Callback,
+  NewItem,
+  TodoItem,
+  TodoItemId,
+  TodoList,
+} from "./types";
 
 const path = __dirname + "/todo.proto";
 const packageDefinition = protoLoader.loadSync(path);
@@ -48,7 +34,7 @@ function addNewTask(task: string): TodoItem {
 }
 
 const todoService = {
-  list: (_: Call<null>, callback: Callback<{ list: TodoItem[] }>) => {
+  list: (_: Call<null>, callback: Callback<TodoList>) => {
     callback(null, { list: fakeDb });
   },
   insert: (call: Call<NewItem>, callback: Callback<TodoItem | null>) => {
